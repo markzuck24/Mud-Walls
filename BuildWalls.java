@@ -1,44 +1,50 @@
-import java.util.Scanner;
+public class MudWalls {
+
+    public static int maxHeight(int[] stickPositions, int[] stickHeights) {
+        int n = stickPositions.length;
+        int m = stickHeights.length;
+        int max = 0;
+
+        for (int i=0; i<n-1; i++) {
+            if (stickPositions[i]<stickPositions[i+1]-1) {
+                // We have a gap
+                int heightDiff =  Math.abs(stickHeights[i+1] - stickHeights[i]);
+                int gapLen = stickPositions[i+1] - stickPositions[i] - 1;
+                int localMax = 0;
+                if (gapLen > heightDiff) {
+                    int low = Math.max(stickHeights[i+1], stickHeights[i]) + 1;
+                    int remainingGap = gapLen - heightDiff - 1;
+                    localMax = low + remainingGap/2;
+
+                } else {
+                    localMax = Math.min(stickHeights[i+1], stickHeights[i]) + gapLen;
+                }
+
+                max = Math.max(max, localMax);
+            }
+        }
+
+        return max;
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        System.setIn(new FileInputStream(System.getProperty("user.home") + "/" + "in9.txt"));
+        //Scanner outputScanner = new Scanner(new FileInputStream(System.getProperty("user.home") + "/" + "out.txt"));
+
+        Scanner scanner = new Scanner(System.in);
+
+        int n = scanner.nextInt();
+        int[] stickPositions = new int[n];
+        for (int i = 0; i < n; i++) {
+            stickPositions[i] = scanner.nextInt();
+        }
+        n = scanner.nextInt();
+        int[] stickHeights = new int[n];
+        for (int i = 0; i < n; i++) {
+            stickHeights[i] = scanner.nextInt();
+        }
 
 
-public class BuildWalls {
-
-	//This function will return the max height calculated as per conditions.
-	public static int maxHeight(int[] stickPositions,int[] sticksHeight){
-		int maxeight=0;
-		for(int i=0;i<stickPositions.length-1;i++){
-			/*Space between both the sticks is calculated. If it is more than one then height is incremented by 1 unit
-			from the given height*/
-			int space = stickPositions[i+1]-stickPositions[i];
-			if(space>1){
-				maxeight=sticksHeight[i];
-				for(int j=1;j<space;j++){
-					if(j==1){
-						maxeight++;
-					}else if(maxeight<sticksHeight[i+1]){
-						maxeight++;
-					}
-				}
-			}
-		}		
-		return maxeight;	
-	}
-	public static void main(String[] args) {
-			
-		Scanner input = new Scanner(System.in);
-		//The position of the sticks are got as input
-		int sticksCount=input.nextInt();
-		int[] stickPositions=new int[sticksCount];
-		for(int i=0;i<sticksCount;i++){
-			stickPositions[i]=input.nextInt();
-		}
-		//The height of the sticks are got as input
-		int heightsCount=input.nextInt();
-		int[] sticksheight=new int[sticksCount];
-		for(int i=0;i<heightsCount;i++){
-			sticksheight[i]=input.nextInt();
-		}
-		System.out.println("final max "+maxHeight(stickPositions,sticksheight));
-	}
-
+        System.out.println(maxHeight(stickPositions, stickHeights));
+    }
 }
